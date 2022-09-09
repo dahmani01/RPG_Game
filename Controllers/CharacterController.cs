@@ -34,9 +34,8 @@ namespace RPG_Game.Controllers
                 return NotFound(response);
             return Ok(response);
         }
-
-        [Authorize(Roles = "Admin")]
-        [Authorize(Roles = "Manager")]
+       
+        [Authorize(Roles = "Admin,Manager")]
         [HttpPost("AddNewCharacter")]
         public async Task<ActionResult<serviceResponse<List<GetCharacterDto>>>> AddNewCharacter(AddCharacterDto character)
         {

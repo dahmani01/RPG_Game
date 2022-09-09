@@ -96,7 +96,7 @@ namespace RPG_Game.Data
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()) ,
                 new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role,"Admin")
+                new Claim(ClaimTypes.Role,user.Role.ToString())
             } ;
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(System.Text.Encoding.UTF8
