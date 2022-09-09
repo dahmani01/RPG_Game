@@ -19,7 +19,7 @@ namespace RPG_Game.Controllers
             _characterService = characterService;
         }
 
-
+        
         [HttpGet("GetAllCharacters")]
         public async Task<ActionResult<serviceResponse<List<GetCharacterDto>>>> GetAllCharacters()
         { 
@@ -35,12 +35,15 @@ namespace RPG_Game.Controllers
             return Ok(response);
         }
 
+        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Manager")]
         [HttpPost("AddNewCharacter")]
         public async Task<ActionResult<serviceResponse<List<GetCharacterDto>>>> AddNewCharacter(AddCharacterDto character)
         {
             return Ok(await _characterService.AddNewCharacter(character));
         }
 
+        [Authorize(Roles = "Admin,Manager")]
         [HttpPut("UpdateCharacter")]
         public async Task<ActionResult<serviceResponse<GetCharacterDto>>> UpdateCharacter(UpdateCharacterDto character)
         {
@@ -50,6 +53,7 @@ namespace RPG_Game.Controllers
             return NotFound(serviceResponse);
         }
 
+        [Authorize(Roles = "Admin")]
         [HttpDelete("DeleteCharacter")]
         public async Task<ActionResult<serviceResponse<List<GetCharacterDto>>>> DeleteCharacter(int id)
         {
