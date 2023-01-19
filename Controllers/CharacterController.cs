@@ -19,10 +19,10 @@ namespace RPG_Game.Controllers
             _characterService = characterService;
         }
 
-        
+
         [HttpGet("GetAllCharacters")]
         public async Task<ActionResult<serviceResponse<List<GetCharacterDto>>>> GetAllCharacters()
-        { 
+        {
             return Ok(await _characterService.GetAllCharacters());
         }
 
@@ -34,32 +34,38 @@ namespace RPG_Game.Controllers
                 return NotFound(response);
             return Ok(response);
         }
-       
-        [Authorize(Roles = "Admin,Manager")]
+
+
         [HttpPost("AddNewCharacter")]
         public async Task<ActionResult<serviceResponse<List<GetCharacterDto>>>> AddNewCharacter(AddCharacterDto character)
         {
             return Ok(await _characterService.AddNewCharacter(character));
         }
 
-        [Authorize(Roles = "Admin,Manager")]
+
         [HttpPut("UpdateCharacter")]
         public async Task<ActionResult<serviceResponse<GetCharacterDto>>> UpdateCharacter(UpdateCharacterDto character)
         {
             var serviceResponse = await _characterService.UpdateCharacter(character);
             if (serviceResponse.Data != null)
-            return Ok(serviceResponse);
+                return Ok(serviceResponse);
             return NotFound(serviceResponse);
         }
 
-        [Authorize(Roles = "Admin")]
+
         [HttpDelete("DeleteCharacter")]
         public async Task<ActionResult<serviceResponse<List<GetCharacterDto>>>> DeleteCharacter(int id)
         {
             var serviceResponse = await _characterService.DeleteCharacter(id);
             if (serviceResponse.Data != null)
                 return Ok(serviceResponse);
-            return NotFound(serviceResponse); 
+            return NotFound(serviceResponse);
+        }
+
+        [HttpPost("Skill")]
+        public async Task<ActionResult<serviceResponse<GetCharacterDto>>> AddCharacterSkill(AddCharacterSkillDto characterSkill)
+        {
+            return Ok(await _characterService.AddCharacterSkill(characterSkill));
         }
     }
 }

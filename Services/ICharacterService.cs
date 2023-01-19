@@ -7,7 +7,8 @@ namespace RPG_Game.Services
         public Task<serviceResponse<List<GetCharacterDto>>> GetAllCharacters();
         public Task<serviceResponse<GetCharacterDto>> GetCharacterById(int id);
         public Task<serviceResponse<List<GetCharacterDto>>> AddNewCharacter(AddCharacterDto character);
-        public Task<serviceResponse<GetCharacterDto>> UpdateCharacter(UpdateCharacterDto character); 
-        public Task <serviceResponse<List<GetCharacterDto>>> DeleteCharacter(int id);
+        public Task<serviceResponse<GetCharacterDto>> UpdateCharacter(UpdateCharacterDto character);
+        public Task<serviceResponse<List<GetCharacterDto>>> DeleteCharacter(int id);
+        public Task<serviceResponse<GetCharacterDto>> AddCharacterSkill(AddCharacterSkillDto characterSkill);
     }
 }

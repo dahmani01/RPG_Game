@@ -20,22 +20,23 @@ namespace RPG_Game.Data
         public async Task<serviceResponse<string>> Login(string username, string password)
         {
             var response = new serviceResponse<string>();
-            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username.ToLower().Equals(username.ToLower())); 
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Username.ToLower().Equals(username.ToLower()));
             if (user == null)
             {
                 response.Success = false;
                 response.Message = "User not found.";
             }
-            else if (!VerifyPasswordHash(password, user.PasswordHash,user.PasswordSalt))
+            else if (!VerifyPasswordHash(password, user.PasswordHash, user.PasswordSalt))
             {
+                //just for testing and learning purposes
                 response.Success = false;
-                response.Message = "Wrong Password."; 
+                response.Message = "Wrong Password.";
             }
             else
             {
                 response.Data = CreateToken(user);
             }
-            return response; 
+            return response;
         }
 
         public async Task<serviceResponse<int>> Register(User user, string password)
@@ -45,19 +46,19 @@ namespace RPG_Game.Data
             {
                 ServiceResponse.Success = false;
                 ServiceResponse.Message = "Username already exists.";
-                return ServiceResponse; 
+                return ServiceResponse;
             }
 
             else
             {
-                CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt); 
+                CreatePasswordHash(password, out byte[] passwordHash, out byte[] passwordSalt);
                 user.PasswordHash = passwordHash;
                 user.PasswordSalt = passwordSalt;
 
-                 _context.Users.Add(user);
+                _context.Users.Add(user);
                 await _context.SaveChangesAsync();
-                ServiceResponse.Data = user.Id; 
-                return ServiceResponse; 
+                ServiceResponse.Data = user.Id;
+                return ServiceResponse;
             }
 
 
@@ -72,7 +73,7 @@ namespace RPG_Game.Data
             return false;
         }
 
-        private void CreatePasswordHash(string password , out byte[] passwordHash , out byte[] passwordSalt)
+        private void CreatePasswordHash(string password, out byte[] passwordHash, out byte[] passwordSalt)
         {
             using (var hmac = new System.Security.Cryptography.HMACSHA512())
             {
@@ -81,9 +82,9 @@ namespace RPG_Game.Data
             }
         }
 
-        private bool VerifyPasswordHash(string password, byte[] passwordHash , byte[] passwordSalt)
+        private bool VerifyPasswordHash(string password, byte[] passwordHash, byte[] passwordSalt)
         {
-            using(var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
+            using (var hmac = new System.Security.Cryptography.HMACSHA512(passwordSalt))
             {
                 var computeHash = hmac.ComputeHash(System.Text.Encoding.UTF8.GetBytes(password));
                 return computeHash.SequenceEqual(passwordHash);
@@ -95,9 +96,8 @@ namespace RPG_Game.Data
             List<Claim> claims = new List<Claim>
             {
                 new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()) ,
-                new Claim(ClaimTypes.Name, user.Username),
-                new Claim(ClaimTypes.Role,user.Role.ToString())
-            } ;
+                new Claim(ClaimTypes.Name, user.Username)
+            };
 
             SymmetricSecurityKey key = new SymmetricSecurityKey(System.Text.Encoding.UTF8
                 .GetBytes(_configuration.GetSection("AppSettings:Token").Value));
@@ -110,10 +110,10 @@ namespace RPG_Game.Data
                 SigningCredentials = creds
             };
 
-            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler(); 
+            JwtSecurityTokenHandler tokenHandler = new JwtSecurityTokenHandler();
             SecurityToken token = tokenHandler.CreateToken(tokenDescriptor);
 
-            return tokenHandler.WriteToken(token); 
+            return tokenHandler.WriteToken(token);
         }
     }
 }

@@ -8,7 +8,6 @@ namespace RPG_Game.Models
         public string Username { get; set; } = string.Empty;
         public byte[] PasswordHash { get; set; }
         public byte[] PasswordSalt { get; set; }
-        public RoleClass Role { get; set; } = RoleClass.Client; 
-        public List<Character>? Characters { get; set; } 
+        public List<Character>? Characters { get; set; }
     }
 }
